@@ -1,0 +1,41 @@
+{
+  "name": "ecommerce-api-mysql-node-express-stack",
+  "version": "1.0.0",
+  "description": "mysql-expres-node-stack-ecommerce-api",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "format": "prettier --write \"**/*.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hasan-karadirek/Ecommerce-API-Mysql-Node-Express-Stack.git"
+  },
+  "keywords": [
+    "ecommerce",
+    "api",
+    "mysql",
+    "express",
+    "node"
+  ],
+  "author": "HasanKaradirek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hasan-karadirek/Ecommerce-API-Mysql-Node-Express-Stack/issues"
+  },
+  "homepage": "https://github.com/hasan-karadirek/Ecommerce-API-Mysql-Node-Express-Stack#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "sequelize": "^6.32.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3"
+  }
+}
