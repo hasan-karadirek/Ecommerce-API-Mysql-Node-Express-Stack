@@ -1,14 +1,18 @@
+const express = require('express');
 const dotenv = require('dotenv');
 // Environment variables config
 dotenv.config({ path: './config/env/config.env' });
 
-const express = require('express');
+const routers = require('./routers/index.js');
+
 const sequelize = require('./helpers/database/connectDatabase');
 const Customer = require('./models/Customer');
+const customErrorHandler = require('./middlewares/errors/customErrorHandler.js');
 const app = express();
 
 //express json middleware
 app.use(express.json());
+
 //sync database
 sequelize
   .sync({ alter: true })
@@ -19,18 +23,10 @@ sequelize
     console.error('Error synchronizing database:', error);
   });
 
-app.get('/api/', async (req, res) => {
-  const customer = await Customer.create({
-    firstName: 'hasan',
-    lastName: 'karadirek',
-    email: 'hasankaradirek223@gmail.com',
-    password: '123qwe123',
-  });
-  await customer.save();
-  return res.status(200).json({
-    message: 'server is working',
-  });
-});
+app.use('/api', routers);
+
+// Error Handler
+app.use(customErrorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
