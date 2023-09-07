@@ -1,16 +1,19 @@
 const { Sequelize } = require('sequelize');
-const asyncHandlerWrapper = require('express-async-handler');
 
-const connectDatabase = asyncHandlerWrapper(async () => {
-  const { DATABASE, DB_USER, DB_PASS, DB_HOST, DB_DIALECT } = process.env;
+const { DATABASE, DB_USER, DB_PASS, DB_HOST, DB_DIALECT } = process.env;
 
-  const sequelize = new Sequelize(DATABASE, DB_USER, DB_PASS, {
-    host: DB_HOST,
-    dialect: DB_DIALECT,
-  });
-
-  await sequelize.authenticate();
-  console.log('Database connection has been established successfully.');
+const sequelize = new Sequelize(DATABASE, DB_USER, DB_PASS, {
+  host: DB_HOST,
+  dialect: DB_DIALECT,
 });
 
-module.exports = connectDatabase;
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connection has been established successfully.');
+  })
+  .catch((error) => {
+    console.log(`Database connection Error:${error.message}`);
+  });
+
+module.exports = sequelize;
