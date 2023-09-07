@@ -1,10 +1,10 @@
 const CustomError = require('../helpers/error/CustomError.js');
-const { comparePassword } = require('../helpers/input/inputHelpers.js');
 const Customer = require('../models/Customer.js');
 const asyncHandlerWrapper = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const { sendEmail } = require('../helpers/libraries/sendEmail.js');
 const { Op } = require('sequelize');
+
 const register = asyncHandlerWrapper(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
   if (!firstName || !lastName || !email || !password) {
