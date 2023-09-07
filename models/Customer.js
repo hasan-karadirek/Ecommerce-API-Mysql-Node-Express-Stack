@@ -2,6 +2,7 @@ const sequelize = require('../helpers/database/connectDatabase.js');
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const Customer = sequelize.define(
   'Customer',
@@ -40,20 +41,33 @@ const Customer = sequelize.define(
         },
       },
     },
+    resetPasswordToken: { type: DataTypes.STRING },
+    resetPasswordExpire: { type: DataTypes.DATE },
   },
   {
     defaultScope: {
       attributes: {
-        exclude: ['password'],
+        exclude: ['password', 'resetPasswordToken', 'resetPasswordExpire'],
       },
     },
   }
 );
-Customer.prototype.generateJwtFromCustomer = () => {
+Customer.prototype.generateResetPasswordToken = function () {
+  const randomHexString = crypto.randomBytes(15).toString('hex');
+
+  const resetPasswordToken = crypto
+    .createHash('SHA256')
+    .update(randomHexString)
+    .digest('hex');
+
+  return resetPasswordToken;
+};
+Customer.prototype.generateJwtFromCustomer = function () {
   const { JWT_SECRET_KEY, JWT_EXPIRE } = process.env;
+
   const payload = {
-    id: this._id,
-    name: this.name,
+    id: this.customer_id,
+    name: this.firstName,
   };
   const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRE });
   return token;

@@ -14,14 +14,14 @@ const app = express();
 app.use(express.json());
 
 //sync database
-sequelize
-  .sync({ alter: true })
-  .then(() => {
-    console.log('Database synchronization completed.');
-  })
-  .catch((error) => {
-    console.error('Error synchronizing database:', error);
-  });
+// sequelize
+//   .sync({ alter: true })
+//   .then(() => {
+//     console.log('Database synchronization completed.');
+//   })
+//   .catch((error) => {
+//     console.error('Error synchronizing database:', error);
+//   });
 
 app.use('/api', routers);
 
