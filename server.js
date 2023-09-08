@@ -15,7 +15,7 @@ app.use(express.json());
 
 //sync database
 // sequelize
-//   .sync({ alter: true })
+//   .sync({ force: true })
 //   .then(() => {
 //     console.log('Database synchronization completed.');
 //   })
