@@ -40,24 +40,13 @@ const getSingleProductBySlug = asyncHandlerWrapper(async (req, res, next) => {
     product: res.product,
   });
 });
-const getAllQuestions = asyncHandlerWrapper(async (req, res, next) => {
+const getAllProducts = asyncHandlerWrapper(async (req, res, next) => {
   return res.status(200).json(res.queryResults);
 });
 const editProduct = asyncHandlerWrapper(async (req, res, next) => {
   const { id } = req.params;
   const { name, description, price, images, categories } = req.body;
-  console.log(name, description, price, images, categories, 'kekeme');
-  // const products=await Product.update({
-  //   name:name,
-  //   description:description,
-  //   price:price,
-  //   ProductImages:images,
 
-  // },{
-
-  //  // where:{id:id},
-
-  // },)
   const product = await Product.findOne({
     where: { id: id },
     include: [ProductImage, Category],
@@ -87,5 +76,5 @@ module.exports = {
   editProduct,
   getSingleProductById,
   getSingleProductBySlug,
-  getAllQuestions,
+  getAllProducts,
 };

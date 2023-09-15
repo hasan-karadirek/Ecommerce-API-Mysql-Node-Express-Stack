@@ -64,31 +64,4 @@ Category.addHook('beforeCreate', async function (category) {
   }
 });
 
-// const Category = sequelize.define('Category', {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     primaryKey: true,
-//     allowNull: false,
-//     autoIncrement: true,
-//     unique: true,
-//   },
-//   name: {
-//     type: DataTypes.STRING(50),
-//     allowNull: false,
-//   },
-//   description: {
-//     type: DataTypes.STRING,
-//   },
-//   slug: {
-//     type: DataTypes.STRING,
-//   },
-// });
-// Category.associate = (models) => {
-//   Category.belongsToMany(models.Product, {
-//     foreignKey: 'CategoryId',
-//   });
-// };
-// Category.belongsToMany(Product, {
-//   foreignKey: 'CategoryId',
-// });
 module.exports = Category;

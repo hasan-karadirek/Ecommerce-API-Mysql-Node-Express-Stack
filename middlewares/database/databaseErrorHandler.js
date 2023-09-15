@@ -44,4 +44,34 @@ const checkProductExist = asyncHandlerWrapper(async (req, res, next) => {
   return next();
 });
 
-module.exports = { checkProductExist };
+const checkCategoryExist = asyncHandlerWrapper(async (req, res, next) => {
+  const { categoryId, categorySlug } = req.params;
+  let category;
+  if (categorySlug) {
+    category = await Category.findOne({ where: { slug: categorySlug } });
+    if (!category) {
+      return next(
+        new CustomError(
+          'There is no category associated with this category slug',
+          404
+        )
+      );
+    }
+  }
+  if (categoryId) {
+    category = await Category.findOne({ where: { id: categoryId } });
+    if (!category) {
+      return next(
+        new CustomError(
+          'There is no category associated with this category id',
+          404
+        )
+      );
+    }
+  }
+  req.categoryId = category.id;
+  res.category = category;
+  return next();
+});
+
+module.exports = { checkProductExist, checkCategoryExist };
