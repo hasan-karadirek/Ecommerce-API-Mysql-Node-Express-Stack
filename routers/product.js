@@ -3,7 +3,7 @@ const {
   addProduct,
   getSingleProductById,
   getSingleProductBySlug,
-  getAllQuestions,
+  getAllProducts,
   editProduct,
 } = require('../controllers/product');
 const {
@@ -17,7 +17,7 @@ router.post('/add', addProduct);
 // after customer review feature, add reviewer pagination middleware
 router.get('/id/:id', checkProductExist, getSingleProductById);
 router.get('/:slug', checkProductExist, getSingleProductBySlug);
-router.get('/', productQueryMiddleware(Product), getAllQuestions);
-router.put('/:id/edit', editProduct);
+router.get('/', productQueryMiddleware(Product), getAllProducts);
+router.put('/:id/edit', checkProductExist, editProduct);
 
 module.exports = router;

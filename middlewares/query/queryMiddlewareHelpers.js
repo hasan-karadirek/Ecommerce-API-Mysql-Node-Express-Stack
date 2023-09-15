@@ -1,3 +1,5 @@
+const Category = require('../../models/Category');
+
 const searchHelper = (req) => {
   const searchTerm = req.query.search;
   const searchOption = {};
@@ -6,6 +8,9 @@ const searchHelper = (req) => {
     searchOption['name'] = regex;
   }
   return searchOption;
+};
+const categoryHelper = (req) => {
+  return !req.categoryId ? {} : { id: req.categoryId };
 };
 
 const productSortHelper = (req) => {
@@ -19,7 +24,7 @@ const productSortHelper = (req) => {
   }
   return order;
 };
-const paginationHelper = async (model, req, searchOption) => {
+const paginationHelper = async (model, req, searchOption, categoryOption) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 5;
 
@@ -28,7 +33,14 @@ const paginationHelper = async (model, req, searchOption) => {
 
   const pagination = {};
 
-  const totalProduct = await model.count({ where: searchOption });
+  const totalProduct = await model.count({
+    where: searchOption,
+    include: {
+      model: Category,
+      through: 'Product_categories',
+      where: categoryOption,
+    },
+  });
 
   if (startIndex > 0) {
     pagination.previous = {
@@ -54,4 +66,5 @@ module.exports = {
   productSortHelper,
   paginationHelper,
   searchHelper,
+  categoryHelper,
 };
