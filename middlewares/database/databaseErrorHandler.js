@@ -3,6 +3,10 @@ const asyncHandlerWrapper = require('express-async-handler');
 const Product = require('../../models/Product');
 const Category = require('../../models/Category');
 const ProductImage = require('../../models/ProductImage');
+const Customer = require('../../models/Customer');
+const GuestCustomer = require('../../models/GuestCustomer');
+const Order = require('../../models/Order');
+const { cartInputHelper } = require('../../helpers/input/inputHelpers');
 
 const checkProductExist = asyncHandlerWrapper(async (req, res, next) => {
   const { id, slug } = req.params;
@@ -73,5 +77,27 @@ const checkCategoryExist = asyncHandlerWrapper(async (req, res, next) => {
   res.category = category;
   return next();
 });
+const checkOrderExist = asyncHandlerWrapper(async (req, res, next) => {
+  cartInputHelper(req, next);
+  const { customerId, guestCustomerId } = req.body;
 
-module.exports = { checkProductExist, checkCategoryExist };
+  if (guestCustomerId) {
+    await GuestCustomer.findOrCreate({ where: { id: guestCustomerId } });
+  }
+  const [order, created] = await Order.findOrCreate({
+    where: {
+      CustomerId: customerId || null,
+      GuestCustomerId: guestCustomerId || null,
+      order_status: 'open',
+    },
+    include: [
+      { model: Customer },
+      { model: GuestCustomer },
+      { model: Product },
+    ],
+  });
+
+  req.order = order;
+  next();
+});
+module.exports = { checkProductExist, checkCategoryExist, checkOrderExist };

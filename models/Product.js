@@ -36,7 +36,6 @@ Product.init(
   }
 );
 Product.prototype.makeSlug = function () {
-  console.log(this.name, 'slugg');
   return slugify(this.name, {
     replacement: '-',
     remove: /[*+~.()'"!:@]/g,

@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const Customer = sequelize.define(
   'Customer',
   {
-    customer_id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
