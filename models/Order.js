@@ -20,6 +20,10 @@ Order.init(
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
+    order_status: {
+      type: DataTypes.STRING,
+      defaultValue: 'open',
+    },
   },
   {
     sequelize,
@@ -28,8 +32,10 @@ Order.init(
 );
 
 Customer.hasMany(Order);
-Order.belongsTo(Customer);
-Order.belongsTo(GuestCustomer);
+GuestCustomer.hasMany(Order);
+Order.belongsTo(Customer, { allowNull: true });
+Order.belongsTo(GuestCustomer, { allowNull: true });
+
 Order.belongsToMany(Product, {
   through: OrderDetail,
   foreignKey: 'OrderId',
@@ -39,4 +45,15 @@ Product.belongsToMany(Order, {
   foreignKey: 'ProductId',
 });
 
+Order.addHook('beforeSave', async function (order) {
+  if (order.Products) {
+    let order_total = 0;
+    order.Products.forEach((product) => {
+      order_total += product.price * product.OrderDetail.quantity;
+    });
+    order.order_total = order_total;
+  } else {
+    order.order_total = 0;
+  }
+});
 module.exports = Order;

@@ -3,30 +3,34 @@ const { DataTypes, Model } = require('sequelize');
 
 class GuestCustomer extends Model {}
 
-GuestCustomer.init({
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    allowNull: false,
-    autoIncrement: true,
-    unique: true,
-  },
-  firstName: {
-    type: DataTypes.STRING(50),
-    allowNull: false,
-  },
-  lastName: {
-    type: DataTypes.STRING(50),
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
+GuestCustomer.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      unique: true,
+    },
+    firstName: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isEmail: true,
+      },
     },
   },
-});
+  {
+    sequelize,
+    modelName: 'GuestCustomer',
+  }
+);
 
 module.exports = GuestCustomer;

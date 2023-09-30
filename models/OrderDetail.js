@@ -15,6 +15,7 @@ OrderDetail.init(
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
   },
   {

@@ -4,6 +4,7 @@ const asyncHandlerWrapper = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const { sendEmail } = require('../helpers/libraries/sendEmail.js');
 const { Op } = require('sequelize');
+const Order = require('../models/Order.js');
 
 const register = asyncHandlerWrapper(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
@@ -23,6 +24,16 @@ const register = asyncHandlerWrapper(async (req, res, next) => {
   const { JWT_COOKIE } = process.env;
   const token = await customer.generateJwtFromCustomer();
   delete customer.dataValues.password;
+  //convert guestCustomer to Customer with its cart
+  const { guestCustomerId } = req.query;
+  if (guestCustomerId) {
+    const order = await Order.findOne({
+      where: { guestCustomerId: parseInt(guestCustomerId) },
+    });
+    order.CustomerId = customer.id;
+    order.GuestCustomerId = null;
+    await order.save();
+  }
   return res
     .status(201)
     .cookie('access_token', token, {
@@ -53,6 +64,17 @@ const login = asyncHandlerWrapper(async (req, res, next) => {
     next(new CustomError('User Credentials do not match.', 400));
   }
   const token = customer.generateJwtFromCustomer();
+
+  //convert guestCustomer to Customer with its cart
+  const { guestCustomerId } = req.query;
+  if (guestCustomerId) {
+    const order = await Order.findOne({
+      where: { guestCustomerId: parseInt(guestCustomerId) },
+    });
+    order.CustomerId = customer.id;
+    order.GuestCustomerId = null;
+    await order.save();
+  }
   const { JWT_COOKIE } = process.env;
   delete customer.dataValues.password;
   return res
@@ -68,6 +90,7 @@ const login = asyncHandlerWrapper(async (req, res, next) => {
     });
 });
 const logout = asyncHandlerWrapper(async (req, res, next) => {
+  //customer to guestCustomer
   return res
     .status(200)
     .cookie('access_token', '', {
