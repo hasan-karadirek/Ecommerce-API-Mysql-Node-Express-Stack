@@ -4,6 +4,7 @@ const Customer = require('./Customer.js');
 const GuestCustomer = require('./GuestCustomer.js');
 const Product = require('./Product.js');
 const OrderDetail = require('./OrderDetail.js');
+const Address = require('./Address.js');
 
 class Order extends Model {}
 
@@ -31,6 +32,8 @@ Order.init(
   }
 );
 
+Address.belongsTo(Order);
+Order.hasMany(Address);
 Customer.hasMany(Order);
 GuestCustomer.hasMany(Order);
 Order.belongsTo(Customer, { allowNull: true });
