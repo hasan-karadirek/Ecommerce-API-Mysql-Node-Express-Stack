@@ -20,13 +20,13 @@ app.use(customErrorHandler);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is started on PORT:${PORT}`);
-  //sync database
-  // sequelize
-  //   .sync({ alter: true })
-  //   .then(() => {
-  //     console.log('Database synchronization completed.');
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error synchronizing database:', error);
-  //   });
+  // sync database
+   sequelize
+     .sync({ alter: true })
+     .then(() => {
+       console.log('Database synchronization completed.');
+     })
+     .catch((error) => {
+       console.error('Error synchronizing database:', error);
+     });
 });
