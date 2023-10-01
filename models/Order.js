@@ -20,6 +20,7 @@ Order.init(
     order_total: {
       type: DataTypes.DECIMAL,
       allowNull: false,
+      defaultValue: 0,
     },
     order_status: {
       type: DataTypes.STRING,
@@ -32,8 +33,7 @@ Order.init(
   }
 );
 
-Address.belongsTo(Order);
-Order.hasMany(Address);
+Order.belongsTo(Address);
 Customer.hasMany(Order);
 GuestCustomer.hasMany(Order);
 Order.belongsTo(Customer, { allowNull: true });
