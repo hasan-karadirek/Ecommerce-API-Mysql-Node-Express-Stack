@@ -6,7 +6,10 @@ const ProductImage = require('../../models/ProductImage');
 const Customer = require('../../models/Customer');
 const GuestCustomer = require('../../models/GuestCustomer');
 const Order = require('../../models/Order');
-const { cartInputHelper } = require('../../helpers/input/inputHelpers');
+const {
+  cartInputHelper,
+  checkoutInputHelper,
+} = require('../../helpers/input/inputHelpers');
 
 const checkProductExist = asyncHandlerWrapper(async (req, res, next) => {
   const { id, slug } = req.params;
@@ -78,11 +81,19 @@ const checkCategoryExist = asyncHandlerWrapper(async (req, res, next) => {
   return next();
 });
 const checkOrderExist = asyncHandlerWrapper(async (req, res, next) => {
-  cartInputHelper(req, next);
+  if (req.baseUrl.endsWith('checkout')) {
+    await checkoutInputHelper(req, next);
+  } else {
+    await cartInputHelper(req, next);
+  }
+
   const { customerId, guestCustomerId } = req.body;
 
   if (guestCustomerId) {
-    await GuestCustomer.findOrCreate({ where: { id: guestCustomerId } });
+    const guestCustomer = await GuestCustomer.findOrCreate({
+      where: { id: guestCustomerId },
+    });
+    req.guestCustomer = guestCustomer;
   }
   const [order, created] = await Order.findOrCreate({
     where: {
@@ -96,7 +107,9 @@ const checkOrderExist = asyncHandlerWrapper(async (req, res, next) => {
       { model: Product },
     ],
   });
-
+  if (req.baseUrl.endsWith('checkout') && order.order_total === 0) {
+    next(new CustomError('You can not checkout with empty cart.', 400));
+  }
   req.order = order;
   next();
 });

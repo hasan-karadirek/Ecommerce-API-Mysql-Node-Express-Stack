@@ -21,5 +21,28 @@ const cartInputHelper = (req, next) => {
   }
   return true;
 };
+const checkoutInputHelper = (req, next) => {
+  const {
+    customerId,
+    guestCustomerId,
+    guestFirstName,
+    guestLastName,
+    guestEmail,
+    address,
+  } = req.body;
+  if (!guestCustomerId && !customerId) {
+    next(new CustomError('Please provide customerId or guestCustomerId', 400));
+  }
+  if (guestCustomerId) {
+    if (!guestFirstName || !guestLastName || !guestEmail) {
+      next(
+        new CustomError(
+          'GuestCustomer should have first name, last name and email to checkout!',
+          400
+        )
+      );
+    }
+  }
+};
 
-module.exports = { comparePassword, cartInputHelper };
+module.exports = { comparePassword, cartInputHelper, checkoutInputHelper };
