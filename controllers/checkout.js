@@ -16,8 +16,8 @@ const checkout = asyncHandlerWrapper(async (req, res, next) => {
   });
 });
 const mollieHook = asyncHandlerWrapper(async (req, res, next) => {
-  const result=req.body;
-  console.log("request",result,);
+  const response=await fetch(`https://api.mollie.com/v2/payments/${req.body.id}`)
+  console.log(response)
   
   return res.status(200);
 });
