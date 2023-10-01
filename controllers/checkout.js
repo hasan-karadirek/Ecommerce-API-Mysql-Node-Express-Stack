@@ -16,7 +16,7 @@ const checkout = asyncHandlerWrapper(async (req, res, next) => {
   });
 });
 const mollieHook = asyncHandlerWrapper(async (req, res, next) => {
-  const result=await req.body.json()
+  const result=await req
   console.log("request",result,);
   
   return res.status(200);
