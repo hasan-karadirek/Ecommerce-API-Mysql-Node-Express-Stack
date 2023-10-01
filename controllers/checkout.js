@@ -1,7 +1,7 @@
 const asyncHandlerWrapper = require('express-async-handler');
 const { checkoutHelper } = require('../helpers/checkout/checkoutHelpers');
 const { paymentHelper } = require('../helpers/payment/paymentHelper');
-import fetch from "node-fetch"
+
 
 const checkout = asyncHandlerWrapper(async (req, res, next) => {
   const order = await checkoutHelper(req);
