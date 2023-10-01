@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
 // Environment variables config
 dotenv.config({ path: './config/env/config.env' });
 
@@ -11,6 +12,7 @@ const app = express();
 
 //express json middleware
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api', routers);
 
