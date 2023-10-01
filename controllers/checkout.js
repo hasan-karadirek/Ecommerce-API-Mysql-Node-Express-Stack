@@ -1,6 +1,10 @@
 const asyncHandlerWrapper = require('express-async-handler');
 const { checkoutHelper } = require('../helpers/checkout/checkoutHelpers');
 const { paymentHelper } = require('../helpers/payment/paymentHelper');
+const { createMollieClient } = require('@mollie/api-client');
+
+
+
 
 
 const checkout = asyncHandlerWrapper(async (req, res, next) => {
@@ -17,8 +21,10 @@ const checkout = asyncHandlerWrapper(async (req, res, next) => {
   });
 });
 const mollieHook = asyncHandlerWrapper(async (req, res, next) => {
-  const response=await fetch(`https://api.mollie.com/v2/payments/${req.body.id}`)
-  console.log(response)
+  const mollieClient = createMollieClient({ apiKey: 'test_umHdbe7aa95UhukkzWtWUneE3Ftn7q' });
+  const payment = await mollieClient.payments.get(req.body.id);
+  
+  console.log(payment,"pay")
   
   return res.status(200);
 });
