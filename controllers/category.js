@@ -9,6 +9,7 @@ const addCategory = asyncHandlerWrapper(async (req, res, next) => {
   });
   await newCategory.save();
   return res.status(201).json({
+    success: true,
     category: newCategory,
   });
 });

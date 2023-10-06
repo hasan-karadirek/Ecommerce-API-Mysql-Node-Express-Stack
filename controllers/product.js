@@ -5,15 +5,23 @@ const Category = require('../models/Category.js');
 const ProductImage = require('../models/ProductImage.js');
 
 const addProduct = asyncHandlerWrapper(async (req, res, next) => {
-  const { name, description, price, images, categories } = req.body;
+  const { name, description, price, categoryArr } = req.body;
+  console.log(categoryArr, 'categoryyyyy');
+  console.log(req.productImages);
+
+  if (!name || !description || !price || !categoryArr) {
+    next(new CustomError('Please provide all required attributes', 400));
+  }
+  const categories = categoryArr.map((id) => parseInt(id));
+
   //create product by provided infos
-  const newProduct = await Product.create(
+  const product = await Product.create(
     {
       name: name,
       description: description,
       price: price,
       // also create product images by associated ProductImage table.
-      ProductImages: images,
+      ProductImages: req.productImages,
     },
     {
       // necessary for association
@@ -22,21 +30,25 @@ const addProduct = asyncHandlerWrapper(async (req, res, next) => {
   );
   // add categories to product by existed category IDs through Product_categories injection table
   // belongToMany association creates addCategories method automatically (plural form of model name, category, categories)
-  await newProduct.addCategories(categories);
-  await newProduct.save();
+  await product.addCategories(categories);
+  await product.save();
+
   return res.status(201).json({
-    product: newProduct,
+    success: true,
+    product: product,
   });
 });
 
 const getSingleProductById = asyncHandlerWrapper(async (req, res, next) => {
   return res.status(200).json({
+    success: true,
     product: res.product,
   });
 });
 
 const getSingleProductBySlug = asyncHandlerWrapper(async (req, res, next) => {
   return res.status(200).json({
+    success: true,
     product: res.product,
   });
 });

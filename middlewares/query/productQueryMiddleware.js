@@ -20,7 +20,7 @@ const productQueryMiddleware = function (model) {
       searchOption,
       categoryOption
     );
-    console.log(categoryOption);
+
     let products = await model.findAll({
       where: searchOption,
       include: [
@@ -39,6 +39,7 @@ const productQueryMiddleware = function (model) {
     });
 
     res.queryResults = {
+      success: true,
       productCount: paginationResult.total,
       pagination: paginationResult.pagination,
       products: products,

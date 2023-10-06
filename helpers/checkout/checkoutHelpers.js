@@ -14,6 +14,7 @@ const checkoutHelper = asyncHandlerWrapper(async (req) => {
   const order = req.order;
   const addressObj = await Address.create(address);
   await order.setAddress(addressObj.id);
+  await order.update({ payment_status: 'pending' });
   await order.save();
   return order;
 });

@@ -66,7 +66,7 @@ Customer.prototype.generateJwtFromCustomer = function () {
   const { JWT_SECRET_KEY, JWT_EXPIRE } = process.env;
 
   const payload = {
-    id: this.customer_id,
+    id: this.id,
     name: this.firstName,
   };
   const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRE });
