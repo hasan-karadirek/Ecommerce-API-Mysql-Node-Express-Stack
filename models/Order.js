@@ -26,6 +26,11 @@ Order.init(
       type: DataTypes.STRING,
       defaultValue: 'open',
     },
+    payment_status: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,

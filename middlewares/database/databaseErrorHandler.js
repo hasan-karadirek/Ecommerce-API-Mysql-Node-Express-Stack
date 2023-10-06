@@ -100,6 +100,7 @@ const checkOrderExist = asyncHandlerWrapper(async (req, res, next) => {
       CustomerId: customerId || null,
       GuestCustomerId: guestCustomerId || null,
       order_status: 'open',
+      payment_status: null,
     },
     include: [
       { model: Customer },

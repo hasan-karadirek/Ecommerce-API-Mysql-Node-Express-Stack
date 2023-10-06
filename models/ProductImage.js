@@ -22,17 +22,5 @@ ProductImage.init(
     modelName: 'ProductImage',
   }
 );
-// const ProductImage = sequelize.define('ProductImage', {
-//   id: {
-//     type: DataTypes.INTEGER,
-//     primaryKey: true,
-//     allowNull: false,
-//     autoIncrement: true,
-//     unique: true,
-//   },
-//   path: {
-//     type: DataTypes.STRING,
-//   },
-// });
-// ProductImage.belongsTo(Product);
+
 module.exports = ProductImage;

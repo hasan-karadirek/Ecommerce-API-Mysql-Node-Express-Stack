@@ -9,18 +9,17 @@ const Product = require('../models/Product.js');
 const {
   checkCategoryExist,
 } = require('../middlewares/database/databaseErrorHandler.js');
+const { getAccessToAdmin } = require('../middlewares/authorization/auth.js');
+router.post('/add', getAccessToAdmin, addCategory);
 
-router.post('/add', addCategory);
 router.get(
   '/id/:categoryId',
-  checkCategoryExist,
-  productQueryMiddleware(Product),
+  [checkCategoryExist, productQueryMiddleware(Product)],
   getSingleCategoryById
 );
 router.get(
   '/:categorySlug',
-  checkCategoryExist,
-  productQueryMiddleware(Product),
+  [checkCategoryExist, productQueryMiddleware(Product)],
   getSingleCategoryById
 );
 module.exports = router;
