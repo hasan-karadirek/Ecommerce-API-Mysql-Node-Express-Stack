@@ -7,7 +7,7 @@ const paymentHelper = asyncHandlerWrapper(
     let redirectUrl;
     if (paymentMethod === 'mollie') {
       const webhook =
-        'http://ec2-16-171-113-29.eu-north-1.compute.amazonaws.com:5000/api/checkout/mollie-hook';
+        `process.env.API_SERVER/api/checkout/mollie-hook`;
 
       redirectUrl = (
         await createMolliePayment(
