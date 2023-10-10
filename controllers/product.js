@@ -5,9 +5,11 @@ const Category = require('../models/Category.js');
 const ProductImage = require('../models/ProductImage.js');
 
 const addProduct = asyncHandlerWrapper(async (req, res, next) => {
-  const { name, description, price, categoryArr } = req.body;
-  console.log(categoryArr, 'categoryyyyy');
-  console.log(req.productImages);
+  const { name, description, price, categoryArr, images } = req.body;
+
+  const formattedImages = images.map((obj) => {
+    return JSON.parse(obj);
+  });
 
   if (!name || !description || !price || !categoryArr) {
     next(new CustomError('Please provide all required attributes', 400));
@@ -21,7 +23,7 @@ const addProduct = asyncHandlerWrapper(async (req, res, next) => {
       description: description,
       price: price,
       // also create product images by associated ProductImage table.
-      ProductImages: req.productImages,
+      ProductImages: formattedImages,
     },
     {
       // necessary for association

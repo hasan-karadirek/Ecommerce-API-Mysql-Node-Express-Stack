@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   addCategory,
   getSingleCategoryById,
+  getAllCategories,
 } = require('../controllers/category.js');
 const productQueryMiddleware = require('../middlewares/query/productQueryMiddleware.js');
 const Product = require('../models/Product.js');
@@ -17,9 +18,11 @@ router.get(
   [checkCategoryExist, productQueryMiddleware(Product)],
   getSingleCategoryById
 );
+router.get('/all', getAllCategories);
 router.get(
   '/:categorySlug',
   [checkCategoryExist, productQueryMiddleware(Product)],
   getSingleCategoryById
 );
+
 module.exports = router;

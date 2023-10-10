@@ -1,6 +1,7 @@
 const express = require('express');
 const { adminLogin, adminDashboard } = require('../controllers/admin');
 const { getAccessToAdmin } = require('../middlewares/authorization/auth');
+const Admin = require('../models/Admin');
 const router = express.Router();
 
 /**
@@ -58,15 +59,15 @@ router.post('/login', adminLogin);
  */
 router.get('/dashboard', getAccessToAdmin, adminDashboard);
 
-// router.post('/createAdmin', async (req, res, next) => {
-//   const admin = await Admin.create({
-//     name: 'Hasan',
-//     email: 'hasankaradirek3@gmail.com',
-//     password: '123qwe123',
-//   });
-//   await admin.save();
-//   console.log(admin);
-//   return res.status(200).json({});
-// });
+router.post('/createAdmin', async (req, res, next) => {
+  const admin = await Admin.create({
+    name: 'Hasan',
+    email: 'hasankaradirek3@gmail.com',
+    password: '123qwe123',
+  });
+  await admin.save();
+
+  return res.status(200).json({});
+});
 
 module.exports = router;

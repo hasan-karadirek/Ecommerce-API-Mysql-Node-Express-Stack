@@ -105,7 +105,14 @@ const checkOrderExist = asyncHandlerWrapper(async (req, res, next) => {
     include: [
       { model: Customer },
       { model: GuestCustomer },
-      { model: Product },
+      {
+        model: Product,
+        include: [
+          {
+            model: ProductImage, // Include ProductImages model
+          },
+        ],
+      },
     ],
   });
   if (req.baseUrl.endsWith('checkout') && order.order_total === 0) {

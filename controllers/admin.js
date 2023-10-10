@@ -1,6 +1,7 @@
 const asyncHandlerWrapper = require('express-async-handler');
 const Admin = require('../models/Admin');
 const bcrypt = require('bcryptjs');
+const CustomError = require('../helpers/error/CustomError');
 
 const adminLogin = asyncHandlerWrapper(async (req, res, next) => {
   const { email, password } = req.body;

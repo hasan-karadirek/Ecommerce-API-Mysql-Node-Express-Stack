@@ -13,9 +13,10 @@ const checkout = asyncHandlerWrapper(async (req, res, next) => {
     req.body.paymentMethod,
     req.body.returnUrl
   );
+
   return res
     .status(201)
-    .cookie('order', order, {
+    .cookie('orderInProcess', order, {
       httpOnly: true,
       expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000 * 60),
       secure: false,
@@ -33,13 +34,16 @@ const mollieHook = asyncHandlerWrapper(async (req, res, next) => {
   const payment = await mollieClient.payments.get(req.body.id);
   //change id:payment.id also add other payment status conditions
   const order = await Order.find({ where: { id: payment.id } });
-  if (payment.status === 'paid') {
+  if (
+    payment.status === 'paid' ||
+    payment.status === 'failed' ||
+    payment.status === 'canceled' ||
+    payment.status === 'expired'
+  ) {
     await order.update({
       order_status: 'closed',
       payment_status: payment.status,
     });
-  } else {
-    await order.update({ payment_status: payment.status });
   }
 
   return res.status(200);

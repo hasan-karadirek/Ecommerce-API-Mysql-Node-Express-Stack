@@ -21,7 +21,7 @@ const customErrorHandler = (err, req, res, next) => {
     }
   }
 
-  console.log(err.name, 'haban', err, 'hakans');
+  console.log(err.name, err);
   res.status(customError.status || 500).json({
     success: false,
     message: customError.message || 'Internal Server Error',

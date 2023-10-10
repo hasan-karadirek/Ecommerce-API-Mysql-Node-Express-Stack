@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const Category = require('../../models/Category');
 
 const searchHelper = (req) => {
@@ -10,7 +11,7 @@ const searchHelper = (req) => {
   return searchOption;
 };
 const categoryHelper = (req) => {
-  return !req.categoryId ? {} : { id: req.categoryId };
+  return !req.categoryId ? {} : { id: parseInt(req.categoryId) };
 };
 
 const productSortHelper = (req) => {
@@ -32,14 +33,18 @@ const paginationHelper = async (model, req, searchOption, categoryOption) => {
   const endIndex = page * limit;
 
   const pagination = {};
-
+  const option = {};
+  let include = [];
+  categoryOption.id
+    ? include.push({
+        model: Category,
+        through: 'Product_categories',
+        where: categoryOption,
+      })
+    : '';
   const totalProduct = await model.count({
     where: searchOption,
-    include: {
-      model: Category,
-      through: 'Product_categories',
-      where: categoryOption,
-    },
+    include: include,
   });
 
   if (startIndex > 0) {

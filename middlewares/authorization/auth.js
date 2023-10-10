@@ -9,7 +9,7 @@ const CustomError = require('../../helpers/error/CustomError');
 
 const getAccessToRoute = (req, res, next) => {
   const token = isTokenIncluded(req);
-  console.log(token, 'toke');
+
   if (!token) {
     next(
       new CustomError(
@@ -19,7 +19,7 @@ const getAccessToRoute = (req, res, next) => {
     );
   }
   const customer = verifyCustomerToken(token);
-  console.log(customer, 'gole');
+
   if (!customer) {
     next(
       new CustomError(
