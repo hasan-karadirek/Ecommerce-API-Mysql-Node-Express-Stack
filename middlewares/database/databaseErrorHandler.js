@@ -100,11 +100,19 @@ const checkOrderExist = asyncHandlerWrapper(async (req, res, next) => {
       CustomerId: customerId || null,
       GuestCustomerId: guestCustomerId || null,
       order_status: 'open',
+      payment_status: null,
     },
     include: [
       { model: Customer },
       { model: GuestCustomer },
-      { model: Product },
+      {
+        model: Product,
+        include: [
+          {
+            model: ProductImage, // Include ProductImages model
+          },
+        ],
+      },
     ],
   });
   if (req.baseUrl.endsWith('checkout') && order.order_total === 0) {

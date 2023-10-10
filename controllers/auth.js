@@ -9,7 +9,7 @@ const Order = require('../models/Order.js');
 const register = asyncHandlerWrapper(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
   if (!firstName || !lastName || !email || !password) {
-    next(new CustomError('Please provide all required attributes.'));
+    next(new CustomError('Please provide all required attributes.', 400));
   }
 
   const customer = await Customer.create({
@@ -42,6 +42,7 @@ const register = asyncHandlerWrapper(async (req, res, next) => {
       secure: false,
     })
     .json({
+      success: true,
       access_token: token,
       customer: customer,
     });
@@ -85,6 +86,7 @@ const login = asyncHandlerWrapper(async (req, res, next) => {
       secure: false,
     })
     .json({
+      success: true,
       access_token: token,
       customer: customer,
     });
@@ -99,6 +101,7 @@ const logout = asyncHandlerWrapper(async (req, res, next) => {
       secure: false,
     })
     .json({
+      success: true,
       message: 'logged out',
     });
 });
@@ -131,6 +134,7 @@ const forgotPassword = asyncHandlerWrapper(async (req, res, next) => {
     });
 
     return res.status(200).json({
+      success: true,
       message: 'Mail sent',
     });
   } catch (err) {
@@ -168,6 +172,7 @@ const resetpassword = asyncHandlerWrapper(async (req, res, next) => {
   customer.resetPasswordToken = null;
   await customer.save();
   return res.status(200).json({
+    success: true,
     message: 'Customer password changed successfully',
   });
 });

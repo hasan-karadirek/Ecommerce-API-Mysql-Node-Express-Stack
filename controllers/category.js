@@ -9,6 +9,7 @@ const addCategory = asyncHandlerWrapper(async (req, res, next) => {
   });
   await newCategory.save();
   return res.status(201).json({
+    success: true,
     category: newCategory,
   });
 });
@@ -16,4 +17,13 @@ const addCategory = asyncHandlerWrapper(async (req, res, next) => {
 const getSingleCategoryById = asyncHandlerWrapper(async (req, res, next) => {
   return res.status(200).json(res.queryResults);
 });
-module.exports = { addCategory, getSingleCategoryById };
+
+const getAllCategories = asyncHandlerWrapper(async (req, res, next) => {
+  const categories = await Category.findAll();
+
+  return res.status(200).json({
+    success: true,
+    categories: categories,
+  });
+});
+module.exports = { addCategory, getSingleCategoryById, getAllCategories };

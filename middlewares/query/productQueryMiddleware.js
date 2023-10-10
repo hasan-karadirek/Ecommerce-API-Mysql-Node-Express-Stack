@@ -13,6 +13,7 @@ const productQueryMiddleware = function (model) {
   return asyncHandler(async function (req, res, next) {
     const searchOption = searchHelper(req);
     const categoryOption = categoryHelper(req);
+    const whereOption = { ...searchOption, ...categoryOption };
     const order = productSortHelper(req);
     const paginationResult = await paginationHelper(
       Product,
@@ -20,25 +21,29 @@ const productQueryMiddleware = function (model) {
       searchOption,
       categoryOption
     );
-    console.log(categoryOption);
-    let products = await model.findAll({
-      where: searchOption,
-      include: [
-        {
-          model: ProductImage,
-        },
-        {
+    let include = [
+      {
+        model: ProductImage,
+      },
+    ];
+    categoryOption.id
+      ? include.push({
           model: Category,
           through: 'Product_categories',
           where: categoryOption,
-        },
-      ],
+        })
+      : '';
+
+    let products = await model.findAll({
+      where: searchOption,
+      include: include,
       order: order,
       offset: paginationResult.startIndex,
       limit: paginationResult.limit,
     });
 
     res.queryResults = {
+      success: true,
       productCount: paginationResult.total,
       pagination: paginationResult.pagination,
       products: products,

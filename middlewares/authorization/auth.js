@@ -1,13 +1,16 @@
 const {
   isTokenIncluded,
-  getAccessTokenFromHeader,
+  verifyCustomerToken,
+  isAdminTokenIncluded,
+  verifyAdminToken,
 } = require('../../helpers/authorization/tokenHelpers');
 const jwt = require('jsonwebtoken');
 const CustomError = require('../../helpers/error/CustomError');
 
-const { JWT_SECRET_KEY } = process.env;
-const getAccessToRoute = (req, response, next) => {
-  if (!isTokenIncluded(req)) {
+const getAccessToRoute = (req, res, next) => {
+  const token = isTokenIncluded(req);
+
+  if (!token) {
     next(
       new CustomError(
         'You do not have authorization to access this route.',
@@ -15,22 +18,29 @@ const getAccessToRoute = (req, response, next) => {
       )
     );
   }
-  const token = getAccessTokenFromHeader(req);
+  const customer = verifyCustomerToken(token);
 
-  jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
-    if (err)
-      return next(
-        new CustomError(
-          'You do not have authorization to access this route.',
-          401
-        )
-      );
-    req.user = {
-      id: decoded.id,
-      name: decoded.name,
-    };
-    next();
-  });
+  if (!customer) {
+    next(
+      new CustomError(
+        'You do not have authorization to access this route.',
+        401
+      )
+    );
+  }
+  req.user = customer;
+  next();
+};
+const getAccessToAdmin = (req, res, next) => {
+  const adminToken = isAdminTokenIncluded(req);
+  if (!adminToken) {
+    next(new CustomError('You are not authorized to access this route', 401));
+  }
+  if (verifyAdminToken(adminToken)) {
+    next(new CustomError('You are not authorized to access this route', 401));
+  }
+
+  next();
 };
 
-module.exports = { getAccessToRoute };
+module.exports = { getAccessToRoute, getAccessToAdmin };
