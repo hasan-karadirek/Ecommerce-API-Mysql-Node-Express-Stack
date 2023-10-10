@@ -1,7 +1,7 @@
 const asyncHandlerWrapper = require('express-async-handler');
 const { checkoutHelper } = require('../helpers/checkout/checkoutHelpers');
 const { paymentHelper } = require('../helpers/payment/paymentHelper');
-const Order = require('../models/Order');
+]const Order = require('../models/Order');
 const CustomError = require('../helpers/error/CustomError');
 const { JWT_COOKIE } = process.env;
 
