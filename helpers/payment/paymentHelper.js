@@ -7,7 +7,7 @@ const paymentHelper = asyncHandlerWrapper(
     let redirectUrl;
     if (paymentMethod === 'mollie') {
       const webhook =
-        `process.env.API_SERVER/api/checkout/mollie-hook`;
+        `${process.env.API_SERVER}/api/checkout/mollie-hook`;
 
       redirectUrl = (
         await createMolliePayment(
