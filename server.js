@@ -6,6 +6,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const swaggerConfig = require('./config/swaggerConfig');
 const path = require('path');
+const
 
 // Environment variables config
 dotenv.config({ path: './config/env/config.env' });
@@ -16,7 +17,7 @@ const sequelize = require('./helpers/database/connectDatabase');
 const customErrorHandler = require('./middlewares/errors/customErrorHandler.js');
 const app = express();
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', `${process.env.API_SERVER}`);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
