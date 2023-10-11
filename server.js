@@ -17,10 +17,10 @@ const sequelize = require('./helpers/database/connectDatabase');
 const customErrorHandler = require('./middlewares/errors/customErrorHandler.js');
 const app = express();
 app.use(cors({
-  origin: 'https://incredible-syrniki-af1d2c.netlify.app', // Adjust this to your development domain
+  origin: 'http://localhost:3000', // Adjust this to your development domain
 }));
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', `https://incredible-syrniki-af1d2c.netlify.app`);
+  res.setHeader('Access-Control-Allow-Origin', `http://localhost:3000`);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
